@@ -1,39 +1,61 @@
-print("Inicio do programa")
 lista = []
 executando = True
 
+
+def gravar_lista():
+    produto = {}
+    produto["nome"] = input("Digite o nome do produto: ")
+    produto["cor"] = input("Digite a cor do produto: ")
+    produto["preco"] = float(input("Digite o preço do produto: "))
+    produto["unidade_medida"] = input("Informe a unidade de medida: ")
+    lista.append(produto)
+
+
+def exibir_produto( produto ):
+    print(f"Produto: {produto['nome']} Cor: {produto['cor']}", )
+    print(f"Preço: {produto['preco']} {produto['unidade_medida']}")
+
+
+def mostrar_lista():
+    for p in lista:
+        exibir_produto( p )        
+
+
+def pesquisar_lista( nome ):
+    for p in lista:
+        if nome == p["nome"]:
+            return p
+    return None
+            
+
+def sair():
+    print("\n\nObrigado por usar nosso sistema!")
+    executando = False
+
+
 while executando:
-    menu = ''' 
-        S I S T E M A    P A R A     H O R T - F R U T
+    menu = '''
+        S I S T E M A   P A R A   H O R T - F R U T
         (A)dicionar um novo produto
         (L)istar todos os produtos
-        (p)esquisar por um produto especifico
+        (P)esquisar por um produto específico
         (S)air do sistema
         \n\n\n
-        Digite a opção desejada ==>
-        '''
+        Digite sua opção ==> 
+    '''
+
     print(menu)
     opcao = input().lower()[0]
-
+    
     if opcao == 'a':
-        dic = {}
-        nome = input("Qual o nome do produto? ")
-        cor = input("Qual a cor do produto? ")
-        preco = float(input("Qual o preço do produto? "))
-        unidade_medida = input("Qual a unidade de medida do produto? ")
-        dic = {"nome": nome, "cor": cor, "preco": preco, "unidade de medida": unidade_medida}
-        lista.append(dic)
+        gravar_lista()
     elif opcao == 'l':
-        for p in lista:
-            print("Nome: ", {p["nome"]})
-            print(f"Cor: {p['cor']}  Nome: {p['nome']}  Preço: {p['preco']}  {p['unidade de medida']}")
+        mostrar_lista()
     elif opcao == 'p':
-        print("Digite o nome do produto a ser pesquisado")
+        print("Digite o nome do produto a ser pesquisado ==> ")
         n1 = input()
-        for p in lista:
-            if n1 == p["nome"]:
-                print("Nome: ", p["nome"])
-                print(f"Cor: {p['cor']}  Nome: {['nome']}  Preço: {p['preco']}  {p['unidade de medida']}")
+        produto = pesquisar_lista( n1 )
+        if produto is not None:
+            exibir_produto( produto )
     elif opcao == 's':
-        print("\n\nObrigado pro usar nosso sistema!")
-        executando = False
+        sair()
