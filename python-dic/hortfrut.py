@@ -59,3 +59,6 @@ while executando:
             exibir_produto( produto )
     elif opcao == 's':
         sair()
+
+print("Vai pro teste-arquivo e entra em teste-arquivo4hort, tá bem melhor o menu lá")
+
