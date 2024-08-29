@@ -4,8 +4,8 @@ import oracledb
 usuario = os.environ.get("FIAP_ORACLE_USER")
 senha = os.environ.get("FIAP_ORACLE_PASS")
 
-con = oracledb.connect(user="rm557462", 
-                       password="080606", 
+con = oracledb.connect(user=usuario, 
+                       password=senha, 
                        dsn="oracle.fiap.com.br:1521/orcl")
 print("Database version:", con.version)
 
