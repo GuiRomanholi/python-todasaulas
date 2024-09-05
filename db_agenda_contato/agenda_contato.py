@@ -102,6 +102,58 @@ def remover():
     else:
         print("Não foi possível localizar este Contato")
 
+
+def atualizar_db( nome : str, contato: Contato ) -> bool:
+    conexao = gerar_conexao_db()
+    cursor = conexao.cursor()
+    sql = """UPDATE agenda SET telefone = :1, email = :2, nascimento = :3
+             WHERE nome = :4"""
+    try:
+        cursor.execute(sql, (contato.telefone, 
+                             contato.email, 
+                             contato.nascimento,
+                             nome))
+        conexao.commit()
+    except Exception as err:
+        print("Erro: ", err)
+        conexao.rollback()
+        return False
+    conexao.close()
+    return True
+    
+
+
+def atualizar():
+    print("Atualiza contato do banco de dados")
+    print("Por favor digite o nome completo do contato a ser atualizado: ")
+    nome = input("==>")
+    print("Agora digite as novas informações para este contato: ")
+    telefone = input("Telefone (DD)XXXXX-XXXX: ")
+    email = input("Email XXXXX@YYYY.ZZZ: ")
+    nascimento = input("Nascimento DD/MM/YYYY: ")
+    if  len(nome) > 5 and \
+        len(telefone) > 5 and \
+        len(email) > 5 and len(nascimento) == 10:
+        date_format = '%d/%m/%Y'
+        nascimento_date = datetime.strptime(nascimento, date_format)
+        if nascimento_date < datetime.now():
+            contato = Contato()
+            contato.nome = nome
+            contato.telefone = telefone
+            contato.email = email
+            contato.nascimento = nascimento_date
+            resultado = atualizar_db(nome, contato)
+            if resultado:
+                print("Contato atualizado com sucesso")
+            else:
+                print("Não foi possível atualizar este Contato")
+        else:
+            print("Data de nascimento incorreta")
+    else:
+        print("Os valores precisam ser preenchidos com mais do que 5 caracteres em cada campo")
+
+    
+
 def consultar():
     print("Consultar o banco de dados")
     print("Por favor digite o nome a ser pesquisado: ")
@@ -174,11 +226,12 @@ def menu_principal():
         print("(C)adastrar")
         print("(L)er registros")
         print("(R)emover registro")
+        print("(A)tualizar")
         print("(S)air")
 
         opcao = input("Escolha sua opção ==>")
         opcao_filtrada = opcao.lower()[0]
-        if opcao_filtrada in ['g', 'c', 'l', 's', 'r']:
+        if opcao_filtrada in ['g', 'c', 'l', 's', 'r', 'a']:
             return opcao_filtrada
         print("Opção é inválida, tecle <ENTER> para prosseguir")
         input()
@@ -232,6 +285,8 @@ if __name__ == "__main__":
             consultar()
         elif escolha == 'r':
             remover()
+        elif escolha == 'a':
+            atualizar()
         elif escolha == 's':
             executando = False
             print("Tchau até breve")
